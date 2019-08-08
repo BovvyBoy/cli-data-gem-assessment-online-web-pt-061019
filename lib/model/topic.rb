@@ -12,4 +12,12 @@ class Topic
     @@all
   end
 
+  def articles
+    Articles.all.select {|article|article.topic == self}
+  end
+
+  def channels
+    articles.map{|article|article.channel == self}
+  end
+
 end

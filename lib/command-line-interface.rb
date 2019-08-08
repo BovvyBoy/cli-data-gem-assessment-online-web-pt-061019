@@ -27,7 +27,8 @@ class CommandLineInterface
       topic_selection
       topic_article_selection
     when "3"
-
+      latest_top
+      topic_article_selection
     else
       puts "Unknown Input Please Try Again"
       input
@@ -53,15 +54,15 @@ class CommandLineInterface
     case input
     when input = "1"
       @@base_path = "https://www.apnews.com/"
-      ap_topstories
+      list_topstories
       article_selection
     when input = "2"
       @@base_path = "https://www.bbc.co.uk/news"
-      bbc_topstories
+      bbc_list_topstories
       article_selection
     when input = "3"
       @@base_path = "https://www.thebureauinvestigates.com/stories/"
-      tbij_topstories
+      tbij_list_topstories
       article_selection
     else
       puts "Unknown Entry Please Try Again:"
@@ -117,70 +118,119 @@ class CommandLineInterface
       topic_selection
     end
   end
-
-  def ap_topstories
-    Scraper.scrape_ap_home_page(@@base_path)
+#----------------------AP------------------------------------------------
+  def make_ap_topstories
+    topstories = Scraper.scrape_ap_home_page("https://www.apnews.com/")
+    Article.new_from_ap_scrape(topstories[0..4])
   end
 
-  def bbc_topstories
-    Scraper.scrape_bbc_home_page(@@base_path)
-  end
-
-  def tbij_topstories
-    Scraper.scrape_tbij_home_page(@@base_path)
+  def list_topstories
+    make_ap_topstories.each_with_index do |story, i|
+      puts "#{i += 1}.  #{story[:title]}"
+    end
   end
 
   def ap_topic_search(extention)
-    Scraper.scrape_ap_home_page("https://www.apnews.com/" + extention)
+    topstories = Scraper.scrape_ap_home_page("https://www.apnews.com/" + extention)
+    Article.new_from_ap_topic_scrape(topstories[0..4])
+  end
+
+  def bbc_topic_topstories
+    ap_topic_search.each_with_index do |story, i|
+      puts "#{i += 1}.  #{story[:title]}"
+    end
+  end
+#---------------------------------------------------------------------------
+#--------------------------------BBC----------------------------------------
+  def make_bbc_topstories
+    topstories = Scraper.scrape_bbc_home_page("https://www.bbc.co.uk/news")
+    Article.new_from_bbc_scrape(topstories[0..4])
+  end
+
+  def bbc_list_topstories
+    make_bbc_topstories.each_with_index do |story, i|
+      puts "#{i += 1}.  #{story[:title]}"
+    end
   end
 
   def bbc_topic_search(extention)
-    Scraper.scrape_bbc_home_page("https://www.bbc.co.uk/" + extention)
+    topstories = Scraper.scrape_bbc_home_page("https://www.bbc.co.uk/" + extention)
+    Article.new_from_bbc_topic_scrape(topstories[0..4])
+  end
+
+  def bbc_topic_topstories
+    bbc_topic_search.each_with_index do |story, i|
+      puts "#{i += 1}.  #{story[:title]}"
+    end
+  end
+  #---------------------------------------------------------------------------
+  #-------------------------------TBIJ----------------------------------------
+  def make_tbij_topstories
+    topstories = Scraper.scrape_tbij_home_page("https://www.thebureauinvestigates.com/stories/")
+    Article.new_from_tbij_scrape(topstories[0..4])
+  end
+
+  def tbij_list_topstories
+    make_tbij_topstories.each_with_index do |story, i|
+      puts "#{i += 1}.  #{story[:title]}"
+    end
+  end
+#---------------------------------------------------------------------------
+
+
+
+  def latest_top
+    puts "TOP STORIES FROM BBC:"
+    bbc_topstories
+    puts "Type bbc(*) * - the number story: "
+    puts ""
+    puts "TOP STORIES FROM THE ASSOCIATED PRESS:"
+    ap_topstories
+    puts "Type ap(*) * - the number story: "
+  end
+
+  def navigate
+    puts ""
+    puts "< = back to stories."
+    puts "<< = back to main menu"
+  end
+
+  def nav_input
+    input = gets.chomp()
+    case input
+    when "<"
+      list_topstories
+      article_selection
+    when "<<"
+      run
+    else
+      puts "Unknown Please Try Again!!"
+    end
   end
 
   def article_selection
     input = gets.chomp()
     case input
     when "1"
-      if @@base_path == "https://www.apnews.com/"
-        Scraper.scrape_ap_article_page(@@base_path + Scraper.ap_links[2])
-      elsif @@base_path == "https://www.bbc.co.uk/news"
-        Scraper.scrape_bbc_article_page("https://www.bbc.co.uk" + Scraper.bbc_links[0])
-      elsif @@base_path == "https://www.thebureauinvestigates.com/stories/"
-        Scraper.scrape_tbij_article_page(Scraper.tbij_links[0])
-      end
+      puts Article.all[0].content
+      navigate
+      nav_input
     when "2"
-      if @@base_path == "https://www.apnews.com/"
-        Scraper.scrape_ap_article_page(@@base_path + Scraper.ap_links[3])
-      elsif @@base_path == "https://www.bbc.co.uk/news"
-        Scraper.scrape_bbc_article_page("https://www.bbc.co.uk" + Scraper.bbc_links[1])
-      elsif @@base_path == "https://www.thebureauinvestigates.com/stories/"
-        Scraper.scrape_tbij_article_page(Scraper.tbij_links[1])
-      end
+      puts Article.all[1].content
+      navigate
+      nav_input
     when "3"
-      if @@base_path == "https://www.apnews.com/"
-        Scraper.scrape_ap_article_page(@@base_path + Scraper.ap_links[4])
-      elsif @@base_path == "https://www.bbc.co.uk/news"
-        Scraper.scrape_bbc_article_page("https://www.bbc.co.uk" + Scraper.bbc_links[2])
-      elsif @@base_path == "https://www.thebureauinvestigates.com/stories/"
-        Scraper.scrape_tbij_article_page(Scraper.tbij_links[2])
-      end
+      puts Article.all[2].content
+      navigate
+      nav_input
     when "4"
-      if @@base_path == "https://www.apnews.com/"
-        Scraper.scrape_ap_article_page(@@base_path + Scraper.ap_links[5])
-      elsif @@base_path == "https://www.bbc.co.uk/news"
-        Scraper.scrape_bbc_article_page("https://www.bbc.co.uk" + Scraper.bbc_links[3])
-      elsif @@base_path == "https://www.thebureauinvestigates.com/stories/"
-        Scraper.scrape_tbij_article_page(Scraper.tbij_links[3])
-      end
+      puts Article.all[3].content
+      navigate
+      nav_input
     when "5"
-      if @@base_path == "https://www.apnews.com/"
-        Scraper.scrape_ap_article_page(@@base_path + Scraper.ap_links[6])
-      elsif @@base_path == "https://www.bbc.co.uk/news"
-        Scraper.scrape_bbc_article_page("https://www.bbc.co.uk" + Scraper.bbc_links[4])
-      elsif @@base_path == "https://www.thebureauinvestigates.com/stories/"
-        Scraper.scrape_tbij_article_page(Scraper.tbij_links[4])
-      end
+      puts Article.all[4].content
+      navigate
+      nav_input
     else
       puts "Unknown Input Please Try Again!"
       article_selection
