@@ -1,10 +1,11 @@
 class Topic
-  attr_accessor :name, :channel
+  attr_accessor :name, :channel, :articles
   @@all = []
 
   def initialize(name, channel = "Unsorted")
     @name = name
     @channel = channel
+    @articles = []
     @@all << self
   end
 
@@ -16,7 +17,7 @@ class Topic
     Articles.all.select {|article|article.topic == self}
   end
 
-  def channels
+  def channel
     articles.map{|article|article.channel == self}
   end
 
