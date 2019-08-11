@@ -4,13 +4,16 @@ class CommandLineInterface
   @@base_path = ""
 
   def run
+    system('clear')
     welcome
     input
   end
 
 #------------------------------------------------------------------------------------------------------------
   def welcome
-    puts "Welcome to News Top 3"
+    font = TTY::Font.new(:doom)
+    puts font.write("Welcome to News Top 3")
+    puts ""
     puts "Please Choose a Number to Proceed:"
     puts "1.     Choose a Channel"
     puts "2.     Browse by Topic"
