@@ -1,10 +1,10 @@
-# Contributing to Learn.co Curriculum
+# Contributing to Top 3 News
 
-We're really exited that you're about to contribute to the [open curriculum](https://learn.co/content-license) on [Learn.co](https://learn.co). If this is your first time contributing, please continue reading to learn how to make the most meaningful and useful impact possible.
+We're really exited that you're about to contribute to the News team on Top 3 News. If this is your first time contributing, please continue reading to learn how to make the most meaningful and useful impact possible.
 
 ## Raising an Issue to Encourage a Contribution
 
-If you notice a problem with the curriculum that you believe needs improvement
+If you notice a problem with the app that you believe needs improvement
 but you're unable to make the change yourself, you should raise a Github issue
 containing a clear description of the problem. Include relevant snippets of
 the content and/or screenshots if applicable. Curriculum owners regularly review
@@ -24,14 +24,11 @@ course.
 
 # Why Contribute?
 
-Curriculum on Learn is publicly and freely available under Learn's
-[Educational Content License](https://learn.co/content-license). By
-embracing an open-source contribution model, our goal is for the curriculum
-on Learn to become, in time, the best educational content the world has
-ever seen.
+Top 3 News is publicly and freely available. By
+embracing an open-source contribution model, our goal is for the content on Top 3 News
+to become, in time, the best news platform the world hasever seen.
 
-We need help from the community of Learners to maintain and improve the
-educational content. Everything from fixing typos, to correcting
-out-dated information, to improving exposition, to adding better examples,
+We need help from the community to maintain and improve the content. Everything from fixing
+typos, to correcting out-dated information, to improving exposition, to adding better examples,
 to fixing tests—all contributions to making the curriculum more effective are
 welcome.

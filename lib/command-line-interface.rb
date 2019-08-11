@@ -25,7 +25,6 @@ class CommandLineInterface
         channel_selection
       elsif a == "   Browse by Topic"
         list_topics
-        #topic_selection
         topic_article_selection
       elsif a == "   Top Stories"
         latest_top
@@ -64,7 +63,6 @@ class CommandLineInterface
     selection = prompt.multi_select("Please Select A Topic:", choices)
     selection.each do |a|
       if a == "   Sports"
-        @@base_path = "https://www.apnews.com/"
         puts "TOP STORIES FROM BBC:"
         bbc_topic_topstories("sport")
         puts "Type bbc(*) * - the number story: "
@@ -89,7 +87,6 @@ class CommandLineInterface
         ap_topic_topstories("apf-intlnews")
         puts "Type ap(*) * - the number story: "
       elsif a == "   Technology"
-        @@base_path = "https://www.thebureauinvestigates.com/stories/"
         puts "TOP STORIES FROM BBC:"
         bbc_topic_topstories("news/technology")
         puts "Type bbc(*) * - the number story: "
@@ -98,7 +95,6 @@ class CommandLineInterface
         ap_topic_topstories("apf-technology")
         puts "Type ap(*) * - the number story: "
       elsif a == "   Business"
-        @@base_path = "https://www.thebureauinvestigates.com/stories/"
         puts "TOP STORIES FROM BBC:"
         bbc_topic_topstories("news/business")
         puts "Type bbc(*) * - the number story: "
@@ -120,55 +116,6 @@ class CommandLineInterface
     end
 
   end
-
-  # def topic_selection
-  #   input = gets.chomp()
-  #   case input
-  #   when input = "1"
-  #     puts "TOP STORIES FROM BBC:"
-  #     bbc_topic_topstories("sport")
-  #     puts "Type bbc(*) * - the number story: "
-  #     puts ""
-  #     puts "TOP STORIES FROM THE ASSOCIATED PRESS:"
-  #     ap_topic_topstories("apf-sports")
-  #     puts "Type ap(*) * - the number story: "
-  #   when input = "2"
-  #     puts "TOP STORIES FROM BBC:"
-  #     bbc_topic_topstories("news/entertainment_and_arts")
-  #     puts "Type bbc(*) * - the number story: "
-  #     puts ""
-  #     puts "TOP STORIES FROM THE ASSOCIATED PRESS:"
-  #     ap_topic_topstories("apf-entertainment")
-  #     puts "Type ap(*) * - the number story: "
-  #   when input = "3"
-  #     puts "TOP STORIES FROM BBC:"
-  #     bbc_topic_topstories("news/world")
-  #     puts "Type bbc(*) * - the number story: "
-  #     puts ""
-  #     puts "TOP STORIES FROM THE ASSOCIATED PRESS:"
-  #     ap_topic_topstories("apf-intlnews")
-  #     puts "Type ap(*) * - the number story: "
-  #   when input = "4"
-  #     puts "TOP STORIES FROM BBC:"
-  #     bbc_topic_topstories("news/technology")
-  #     puts "Type bbc(*) * - the number story: "
-  #     puts ""
-  #     puts "TOP STORIES FROM THE ASSOCIATED PRESS:"
-  #     ap_topic_topstories("apf-technology")
-  #     puts "Type ap(*) * - the number story: "
-  #   when input = "5"
-  #     puts "TOP STORIES FROM BBC:"
-  #     bbc_topic_topstories("news/business")
-  #     puts "Type bbc(*) * - the number story: "
-  #     puts ""
-  #     puts "TOP STORIES FROM THE ASSOCIATED PRESS:"
-  #     ap_topic_topstories("apf-business")
-  #     puts "Type ap(*) * - the number story: "
-  #   else
-  #     puts "Unknown Input Please Try again!"
-  #     topic_selection
-  #   end
-  # end
 
   def latest_top
     puts "TOP STORIES FROM BBC:"
@@ -307,7 +254,7 @@ class CommandLineInterface
   #---------------------------------------------------------------------------
   #--------------------------------BBC----------------------------------------
     def make_bbc_topstories
-      topstories = Scraper.scrape_bbc_home_page("https://www.bbc.co.uk/news")
+      topstories = Scraper.scrape_bbc_home_page("https://www.bbc.co.uk/news/")
       Article.new_from_bbc_scrape(topstories)
     end
 
