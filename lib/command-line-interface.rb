@@ -13,68 +13,100 @@ class CommandLineInterface
   def welcome
     font = TTY::Font.new(:doom)
     puts font.write("Welcome to News Top 3")
-    puts ""
-    puts "Please Choose a Number to Proceed:"
-    puts "1.     Choose a Channel"
-    puts "2.     Browse by Topic"
-    puts "3.     Top Stories"
   end
 
   def input
-    input = gets.chomp()
-    case input
-    when "1"
-      list_channels
-      channel_selection
-    when "2"
-      list_topics
-      topic_selection
-      topic_article_selection
-
-    when "3"
-      latest_top
-      topic_article_selection
-    else
-      puts "Unknown Input Please Try Again"
-      input
+    prompt = TTY::Prompt.new
+    choices = ["   Choose a Channel", "   Browse by Topic", "   Top Stories"]
+    selection = prompt.multi_select("Please Select An Option:", choices)
+    selection.each do |a|
+      if a == "   Choose a Channel"
+        list_channels
+        channel_selection
+      elsif a == "   Browse by Topic"
+        list_topics
+        #topic_selection
+        topic_article_selection
+      elsif a == "   Top Stories"
+        latest_top
+        topic_article_selection
+      end
     end
   end
 
   def list_channels
-    puts "1.     AP - The Associated Press"
-    puts "2.     BBC - Britist Broadcast Company"
-    puts "3.     TBIJ - The Bureau of Investigative Journalism"
+    prompt = TTY::Prompt.new
+    choices = ["   AP - The Associated Press", "   BBC - Britist Broadcast Company", "   TBIJ - The Bureau of Investigative Journalism"]
+    selection = prompt.multi_select("Please Select A Channel:", choices)
+    selection.each do |a|
+      if a == "   AP - The Associated Press"
+        @@base_path = "https://www.apnews.com/"
+        new_channel
+        list_topstories
+        article_selection
+      elsif a == "   BBC - Britist Broadcast Company"
+        @@base_path = "https://www.bbc.co.uk/news"
+        new_channel
+        bbc_list_topstories
+        article_selection
+      elsif a == "   TBIJ - The Bureau of Investigative Journalism"
+        @@base_path = "https://www.thebureauinvestigates.com/stories/"
+        new_channel
+        tbij_list_topstories
+        article_selection
+      end
+    end
   end
 
   def list_topics
-    puts "1.     Sports"
-    puts "2.     Entertainment"
-    puts "3.     International"
-    puts "4.     Technology"
-    puts "5.     Business"
-  end
-
-  def channel_selection
-    input = gets.chomp()
-    case input
-    when input = "1"
-      @@base_path = "https://www.apnews.com/"
-      new_channel
-      list_topstories
-      article_selection
-    when input = "2"
-      @@base_path = "https://www.bbc.co.uk/news"
-      new_channel
-      bbc_list_topstories
-      article_selection
-    when input = "3"
-      @@base_path = "https://www.thebureauinvestigates.com/stories/"
-      new_channel
-      tbij_list_topstories
-      article_selection
-    else
-      puts "Unknown Entry Please Try Again:"
-      channel_selection
+    prompt = TTY::Prompt.new
+    choices = ["   Sports", "   Entertainment", "   International", "   Technology", "   Business"]
+    selection = prompt.multi_select("Please Select A Topic:", choices)
+    selection.each do |a|
+      if a == "   Sports"
+        @@base_path = "https://www.apnews.com/"
+        puts "TOP STORIES FROM BBC:"
+        bbc_topic_topstories("sport")
+        puts "Type bbc(*) * - the number story: "
+        puts ""
+        puts "TOP STORIES FROM THE ASSOCIATED PRESS:"
+        ap_topic_topstories("apf-sports")
+        puts "Type ap(*) * - the number story: "
+      elsif a == "   Entertainment"
+        puts "TOP STORIES FROM BBC:"
+        bbc_topic_topstories("news/entertainment_and_arts")
+        puts "Type bbc(*) * - the number story: "
+        puts ""
+        puts "TOP STORIES FROM THE ASSOCIATED PRESS:"
+        ap_topic_topstories("apf-entertainment")
+        puts "Type ap(*) * - the number story: "
+      elsif a == "   International"
+        puts "TOP STORIES FROM BBC:"
+        bbc_topic_topstories("news/world")
+        puts "Type bbc(*) * - the number story: "
+        puts ""
+        puts "TOP STORIES FROM THE ASSOCIATED PRESS:"
+        ap_topic_topstories("apf-intlnews")
+        puts "Type ap(*) * - the number story: "
+      elsif a == "   Technology"
+        @@base_path = "https://www.thebureauinvestigates.com/stories/"
+        puts "TOP STORIES FROM BBC:"
+        bbc_topic_topstories("news/technology")
+        puts "Type bbc(*) * - the number story: "
+        puts ""
+        puts "TOP STORIES FROM THE ASSOCIATED PRESS:"
+        ap_topic_topstories("apf-technology")
+        puts "Type ap(*) * - the number story: "
+      elsif a == "   Business"
+        @@base_path = "https://www.thebureauinvestigates.com/stories/"
+        puts "TOP STORIES FROM BBC:"
+        bbc_topic_topstories("news/business")
+        puts "Type bbc(*) * - the number story: "
+        puts ""
+        puts "TOP STORIES FROM THE ASSOCIATED PRESS:"
+        ap_topic_topstories("apf-business")
+        puts "Type ap(*) * - the number story: "
+      end
     end
   end
 
@@ -89,54 +121,54 @@ class CommandLineInterface
 
   end
 
-  def topic_selection
-    input = gets.chomp()
-    case input
-    when input = "1"
-      puts "TOP STORIES FROM BBC:"
-      bbc_topic_topstories("sport")
-      puts "Type bbc(*) * - the number story: "
-      puts ""
-      puts "TOP STORIES FROM THE ASSOCIATED PRESS:"
-      ap_topic_topstories("apf-sports")
-      puts "Type ap(*) * - the number story: "
-    when input = "2"
-      puts "TOP STORIES FROM BBC:"
-      bbc_topic_topstories("news/entertainment_and_arts")
-      puts "Type bbc(*) * - the number story: "
-      puts ""
-      puts "TOP STORIES FROM THE ASSOCIATED PRESS:"
-      ap_topic_topstories("apf-entertainment")
-      puts "Type ap(*) * - the number story: "
-    when input = "3"
-      puts "TOP STORIES FROM BBC:"
-      bbc_topic_topstories("news/world")
-      puts "Type bbc(*) * - the number story: "
-      puts ""
-      puts "TOP STORIES FROM THE ASSOCIATED PRESS:"
-      ap_topic_topstories("apf-intlnews")
-      puts "Type ap(*) * - the number story: "
-    when input = "4"
-      puts "TOP STORIES FROM BBC:"
-      bbc_topic_topstories("news/technology")
-      puts "Type bbc(*) * - the number story: "
-      puts ""
-      puts "TOP STORIES FROM THE ASSOCIATED PRESS:"
-      ap_topic_topstories("apf-technology")
-      puts "Type ap(*) * - the number story: "
-    when input = "5"
-      puts "TOP STORIES FROM BBC:"
-      bbc_topic_topstories("news/business")
-      puts "Type bbc(*) * - the number story: "
-      puts ""
-      puts "TOP STORIES FROM THE ASSOCIATED PRESS:"
-      ap_topic_topstories("apf-business")
-      puts "Type ap(*) * - the number story: "
-    else
-      puts "Unknown Input Please Try again!"
-      topic_selection
-    end
-  end
+  # def topic_selection
+  #   input = gets.chomp()
+  #   case input
+  #   when input = "1"
+  #     puts "TOP STORIES FROM BBC:"
+  #     bbc_topic_topstories("sport")
+  #     puts "Type bbc(*) * - the number story: "
+  #     puts ""
+  #     puts "TOP STORIES FROM THE ASSOCIATED PRESS:"
+  #     ap_topic_topstories("apf-sports")
+  #     puts "Type ap(*) * - the number story: "
+  #   when input = "2"
+  #     puts "TOP STORIES FROM BBC:"
+  #     bbc_topic_topstories("news/entertainment_and_arts")
+  #     puts "Type bbc(*) * - the number story: "
+  #     puts ""
+  #     puts "TOP STORIES FROM THE ASSOCIATED PRESS:"
+  #     ap_topic_topstories("apf-entertainment")
+  #     puts "Type ap(*) * - the number story: "
+  #   when input = "3"
+  #     puts "TOP STORIES FROM BBC:"
+  #     bbc_topic_topstories("news/world")
+  #     puts "Type bbc(*) * - the number story: "
+  #     puts ""
+  #     puts "TOP STORIES FROM THE ASSOCIATED PRESS:"
+  #     ap_topic_topstories("apf-intlnews")
+  #     puts "Type ap(*) * - the number story: "
+  #   when input = "4"
+  #     puts "TOP STORIES FROM BBC:"
+  #     bbc_topic_topstories("news/technology")
+  #     puts "Type bbc(*) * - the number story: "
+  #     puts ""
+  #     puts "TOP STORIES FROM THE ASSOCIATED PRESS:"
+  #     ap_topic_topstories("apf-technology")
+  #     puts "Type ap(*) * - the number story: "
+  #   when input = "5"
+  #     puts "TOP STORIES FROM BBC:"
+  #     bbc_topic_topstories("news/business")
+  #     puts "Type bbc(*) * - the number story: "
+  #     puts ""
+  #     puts "TOP STORIES FROM THE ASSOCIATED PRESS:"
+  #     ap_topic_topstories("apf-business")
+  #     puts "Type ap(*) * - the number story: "
+  #   else
+  #     puts "Unknown Input Please Try again!"
+  #     topic_selection
+  #   end
+  # end
 
   def latest_top
     puts "TOP STORIES FROM BBC:"
